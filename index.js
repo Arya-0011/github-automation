@@ -1,12 +1,7 @@
-const express = require('express')
-const app = express()
-const port = 3000
-const checkOpenPRs = require('./bin/pullRequestCron')
+const { checkOpenPRs } = require("./github/emailPendingPRs");
+const { deleteOldBranches } = require('./github/deleteStaleBranches')
+require('dotenv').config()
 
-app.get('/pullRequestCron', (req, res) => {
-  checkOpenPRs()
-})
+checkOpenPRs(process.env.TOKEN, process.env.ORGANIZATION, "arya.aniket@tyreplex.com", ["arya.aniket@tyreplex.com", "test.tyreplex.com"]);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+deleteOldBranches(process.env.TOKEN, process.env.ORGANIZATION)
